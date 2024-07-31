@@ -3,7 +3,6 @@ package auctions
 import (
 	"encoding/json"
 	"factory51/tornapi/src/database"
-	"factory51/tornapi/src/helpers"
 	"factory51/tornapi/src/orm"
 	"factory51/tornapi/src/responses"
 	"fmt"
@@ -13,14 +12,9 @@ import (
 
 func EndpointSaveAuction(w http.ResponseWriter, r *http.Request) {
 
-	fmt.Printf("Save Auction Data\n")
-
 	incoming_auction := IncomingAuction{}
 	err := json.NewDecoder(r.Body).Decode(&incoming_auction)
 	incoming_auction.Created = time.Now().Format("2006-01-02 15:04:05")
-
-	fmt.Printf("Incoming: %v\n", incoming_auction)
-	helpers.OutputStruct(incoming_auction)
 
 	if err != nil {
 		msg := fmt.Sprintf("Error: Unable to decode supplied JSON. Please amend your request. : %v", err.Error())
@@ -33,6 +27,12 @@ func EndpointSaveAuction(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		fmt.Printf("%v\n", err)
+	}
+
+	err = ProcessAuction(incoming_auction)
+
+	if err != nil {
+		fmt.Printf("[ERROR] %v\n", err.Error())
 	}
 
 }

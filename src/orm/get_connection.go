@@ -28,6 +28,8 @@ func GetConnection(conn *sql.DB) (db *gorm.DB, err error) {
 		Logger: logger.Default.LogMode(mode),
 	})
 
+	//db = db.Debug()
+
 	return
 
 }
